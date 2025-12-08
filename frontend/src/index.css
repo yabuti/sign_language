@@ -1,0 +1,95 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  background-attachment: fixed;
+  color: #FFFFFF;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* App Container */
+.app-container {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at top, rgba(106, 13, 173, 0.15) 0%, transparent 50%);
+}
+
+/* Section Container */
+.section-container {
+  background: rgba(26, 10, 51, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  margin: 30px auto;
+  border-radius: 24px;
+  max-width: 1400px;
+  box-shadow: 0 20px 60px rgba(106, 13, 173, 0.4), 
+              0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 70px rgba(106, 13, 173, 0.5);
+}
+
+/* Section Heading */
+.section-container h2 {
+  color: #FFFFFF;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .section-container {
+    padding: 20px;
+    margin: 15px;
+    border-radius: 16px;
+  }
+
+  .section-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .placeholder {
+    padding: 40px 20px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-container {
+    padding: 15px;
+    margin: 10px;
+  }
+
+  .section-container h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Placeholder */
+.placeholder {
+  color: #CCCCCC;
+  text-align: center;
+  padding: 60px 0;
+  font-size: 1.2rem;
+  border: 2px dashed rgba(106, 13, 173, 0.5);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+}

@@ -1,0 +1,223 @@
+.image-section-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(26, 10, 51, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 50px;
+  margin: 50px auto;
+  border-radius: 24px;
+  max-width: 900px;
+  box-shadow: 0 20px 60px rgba(106, 13, 173, 0.4),
+              0 0 0 1px rgba(255, 255, 255, 0.05);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.image-section-container:hover {
+  transform: translateY(-5px);
+}
+
+.image-section-container h2 {
+  color: #ffffff;
+  margin-bottom: 35px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Upload Area */
+.upload-area {
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  border: 2px dashed rgba(139, 92, 246, 0.5);
+  border-radius: 16px;
+  background: rgba(42, 10, 85, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #a78bfa;
+}
+
+.upload-label:hover {
+  border-color: #8B5CF6;
+  background: rgba(42, 10, 85, 0.5);
+  transform: translateY(-2px);
+}
+
+.upload-text {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.upload-subtext {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #b4a5d8;
+}
+
+/* Processing overlay */
+.processing-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(18, 0, 50, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.spinner-large {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.image-preview {
+  margin: 20px 0;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.image-preview img {
+  max-width: 500px;
+  max-height: 400px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(106, 13, 173, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.image-preview img:hover {
+  transform: scale(1.02);
+}
+
+.text-output {
+  background: rgba(42, 10, 85, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  margin-top: 30px;
+  border-radius: 16px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(106, 13, 173, 0.3);
+}
+
+.text-output h3 {
+  color: #a78bfa;
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.text-display {
+  background: rgba(18, 0, 50, 0.5);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-display p {
+  color: #ffffff;
+  font-size: 1.3rem;
+  margin: 0;
+  word-wrap: break-word;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.image-preview {
+  position: relative;
+  margin: 20px 0;
+  animation: fadeIn 0.5s ease-in;
+}
+
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .image-section-container {
+    padding: 20px;
+  }
+
+  .upload-area {
+    padding: 40px 20px;
+  }
+
+  .upload-label svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .upload-text {
+    font-size: 1rem;
+  }
+
+  .upload-subtext {
+    font-size: 0.8rem;
+  }
+
+  .image-preview {
+    max-height: 300px;
+  }
+
+  .text-display {
+    min-height: 120px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .image-section-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .upload-area {
+    padding: 30px 15px;
+  }
+
+  .image-preview {
+    max-height: 250px;
+  }
+
+  .text-display {
+    padding: 15px;
+  }
+}

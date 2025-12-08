@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Large model files (too big for GitHub)
+*.h5
+*.keras
+*.pkl
+*.pth
+
+# Training data (too large)
+eth_frames/
+asl_top30_frames/
+models/
+
+# Uploads and temp files
+backend/uploads/
+backend/debug_frame.jpg
+backend/comparison.jpg
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build
+frontend/build/
+dist/
