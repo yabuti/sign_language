@@ -30,6 +30,40 @@
   background-clip: text;
 }
 
+/* Language Selector */
+.language-selector {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.lang-btn {
+  padding: 12px 24px;
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  border-radius: 12px;
+  background: rgba(42, 10, 85, 0.3);
+  color: #b4a5d8;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+  border-color: #8B5CF6;
+  background: rgba(42, 10, 85, 0.5);
+  color: #ffffff;
+}
+
+.lang-btn.active {
+  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  border-color: #8B5CF6;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
 /* Upload Area */
 .upload-area {
   margin-bottom: 30px;

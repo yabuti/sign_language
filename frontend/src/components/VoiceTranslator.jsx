@@ -20,7 +20,6 @@ function VoiceTranslator() {
   const languageMap = {
     en: "en-US",
     am: "am-ET",
-    om: "om-ET",
   };
 
   const startRecording = () => {
@@ -137,7 +136,6 @@ function VoiceTranslator() {
       >
         <option value="en">🇺🇸 English</option>
         <option value="am">🇪🇹 Amharic</option>
-        <option value="om">🇪🇹 Afaan Oromo</option>
       </select>
 
       <div className={`mic-icon ${recording ? 'recording' : ''}`}>
@@ -157,7 +155,7 @@ function VoiceTranslator() {
 
       <div className="text-output">
         <h3>
-          📝 {language === "en" ? "English" : language === "am" ? "Amharic" : "Afaan Oromo"} Text
+          📝 {language === "en" ? "English" : "Amharic"} Text
         </h3>
         <div className="text-display">
           <p>{originalText}</p>

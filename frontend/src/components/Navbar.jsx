@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FiVideo, FiImage, FiMic, FiLogOut } from "react-icons/fi";
+import { FiVideo, FiImage, FiMic, FiLogOut, FiBook } from "react-icons/fi";
 import "./Navbar.css";
 
 function Navbar({ onSelect }) {
@@ -26,6 +26,10 @@ function Navbar({ onSelect }) {
         <button onClick={() => onSelect("voice")} className="nav-btn">
           <FiMic size={18} />
           <span>Voice</span>
+        </button>
+        <button onClick={() => onSelect("learn")} className="nav-btn">
+          <FiBook size={18} />
+          <span>Learn</span>
         </button>
         <button onClick={handleLogout} className="nav-btn logout-btn">
           <FiLogOut size={18} />

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Keras/TensorFlow ASL Image Prediction Script
-Uses sign_language_model.h5 for predictions
+Sign Language Image Prediction Script
+Uses sign_language_model.h5 for ASL alphabet (A-Z)
 """
 
 import sys
@@ -13,7 +13,8 @@ from PIL import Image
 
 # ===== Configuration =====
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "frontend", "sign_language_model.h5")
-# Common ASL alphabet labels (A-Z)
+
+# ASL Alphabet Labels (26 letters A-Z)
 LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
           'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
@@ -21,14 +22,12 @@ def load_model():
     """Load the Keras model"""
     try:
         if not os.path.exists(MODEL_PATH):
-            print(json.dumps({"error": f"Model not found at {MODEL_PATH}"}))
-            sys.exit(1)
+            return None, f"Model not found at {MODEL_PATH}"
         
         model = keras.models.load_model(MODEL_PATH)
-        return model
+        return model, None
     except Exception as e:
-        print(json.dumps({"error": f"Failed to load model: {str(e)}"}))
-        sys.exit(1)
+        return None, f"Failed to load model: {str(e)}"
 
 def preprocess_image(image_path, target_size=(64, 64)):
     """Preprocess image for prediction"""
@@ -45,16 +44,17 @@ def preprocess_image(image_path, target_size=(64, 64)):
         # Add batch dimension
         img_array = np.expand_dims(img_array, axis=0)
         
-        return img_array
+        return img_array, None
     except Exception as e:
-        print(json.dumps({"error": f"Failed to preprocess image: {str(e)}"}))
-        sys.exit(1)
+        return None, f"Failed to preprocess image: {str(e)}"
 
 def predict_image(image_path, model):
     """Predict ASL sign from image"""
     try:
         # Preprocess image
-        img_array = preprocess_image(image_path)
+        img_array, error = preprocess_image(image_path)
+        if error:
+            return {"text": error, "confidence": 0.0, "success": False}
         
         # Predict
         predictions = model.predict(img_array, verbose=0)
@@ -67,41 +67,59 @@ def predict_image(image_path, model):
         if predicted_index < len(LABELS):
             predicted_label = LABELS[predicted_index]
         else:
-            predicted_label = f"Class_{predicted_index}"
+            predicted_label = f"Letter_{predicted_index}"
+        
+        # Top 3 predictions
+        top_3_indices = np.argsort(predictions[0])[-3:][::-1]
+        top_3 = []
+        for idx in top_3_indices:
+            label = LABELS[idx] if idx < len(LABELS) else f"Letter_{idx}"
+            top_3.append({
+                "label": label,
+                "confidence": round(float(predictions[0][idx]) * 100, 2)
+            })
+        
+        result_text = f"✅ {predicted_label} ({round(confidence * 100, 2)}%)\n\n"
+        result_text += "Top 3 Predictions:\n"
+        for i, pred in enumerate(top_3):
+            result_text += f"{i+1}. {pred['label']} - {pred['confidence']}%\n"
         
         return {
-            "text": predicted_label,
+            "text": result_text,
             "confidence": round(confidence * 100, 2),
+            "top_3": top_3,
             "success": True
         }
         
     except Exception as e:
         return {
-            "text": "Error processing image",
+            "text": f"Error processing image: {str(e)}",
             "confidence": 0.0,
-            "success": False,
-            "error": str(e)
+            "success": False
         }
 
 def main():
     if len(sys.argv) < 2:
-        print(json.dumps({"error": "No image path provided"}))
+        print(json.dumps({"error": "No image path provided", "text": "No image provided"}))
         sys.exit(1)
     
     image_path = sys.argv[1]
     
     if not os.path.exists(image_path):
-        print(json.dumps({"error": f"Image not found: {image_path}"}))
+        print(json.dumps({"error": f"Image not found: {image_path}", "text": "Image not found"}))
         sys.exit(1)
     
     # Load model
-    model = load_model()
+    model, error = load_model()
+    if error:
+        print(json.dumps({"error": error, "text": error}))
+        sys.exit(1)
     
     # Predict
     result = predict_image(image_path, model)
     
     # Output JSON
-    print(json.dumps(result))
+    print(json.dumps(result, ensure_ascii=False))
 
 if __name__ == "__main__":
     main()

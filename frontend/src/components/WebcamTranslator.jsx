@@ -13,10 +13,12 @@ function WebcamTranslator() {
   const [translatedText, setTranslatedText] = useState("Your text will appear here");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [debugFrameUrl, setDebugFrameUrl] = useState(null);
+  const [frameInfo, setFrameInfo] = useState("");
   const recordedChunksRef = useRef([]);
 
-  // Ethiopian model only
-  const selectedModel = "eth_mobilenet";
+  // Ethiopian landmark model (uses MediaPipe hand detection)
+  const selectedModel = "eth_landmark";
 
   // Track activity when component mounts
   useEffect(() => {
@@ -43,14 +45,14 @@ function WebcamTranslator() {
     mediaRecorderRef.current = mediaRecorder;
     mediaRecorder.start();
     setIsRecording(true);
-    setTranslatedText("🎥 Recording... Perform your sign!");
+    setTranslatedText("🎥 Recording 4 seconds... Hold your sign steady!");
 
-    // Auto-stop after 3 seconds (enough for 30 frames)
+    // Auto-stop after 4 seconds (more frames = more stable prediction)
     setTimeout(() => {
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
         stopRecording();
       }
-    }, 3000);
+    }, 4000);
   };
 
   // Stop recording
@@ -85,8 +87,13 @@ function WebcamTranslator() {
       const data = await response.json();
       
       if (data.success) {
-        let resultText = `✅ ${data.text} (${data.confidence}% confidence)\n`;
-        resultText += `📊 Model: ${data.model_used}\n\n`;
+        // Check if prediction is stable
+        const isStable = data.is_stable !== false;
+        const stabilityIcon = isStable ? "✅" : "⚠️";
+        const stabilityNote = isStable ? "" : " (Unstable - try again)";
+        
+        let resultText = `${stabilityIcon} ${data.text} (${data.confidence}% confidence)${stabilityNote}\n`;
+        resultText += `📊 Agreement: ${data.agreement || "N/A"}\n\n`;
         
         if (data.top_3 && data.top_3.length > 0) {
           resultText += "Top 3 Predictions:\n";
@@ -96,8 +103,14 @@ function WebcamTranslator() {
         }
         
         setTranslatedText(resultText);
+        
+        // Load debug frame with timestamp to prevent caching
+        setDebugFrameUrl(`http://localhost:5000/debug-frame?t=${Date.now()}`);
+        setFrameInfo(data.frame_info || "");
       } else {
         setTranslatedText(data.error || "Error processing video");
+        setDebugFrameUrl(null);
+        setFrameInfo("");
       }
     } catch (error) {
       console.error("Error sending video:", error);
@@ -177,7 +190,7 @@ function WebcamTranslator() {
                   className="capture-btn"
                 >
                   <FiVideo size={20} />
-                  <span>{isRecording ? "Recording..." : "Capture Sign (3s)"}</span>
+                  <span>{isRecording ? "Recording... Hold steady!" : "Capture Sign (4s)"}</span>
                 </button>
                 <button onClick={() => setCameraOn(false)} className="off-btn">
                   <FiVideoOff size={20} />
@@ -194,6 +207,20 @@ function WebcamTranslator() {
           <div className="text-display">
             <p>{translatedText}</p>
           </div>
+          
+          {/* Debug Frame - shows the exact frame used for prediction */}
+          {debugFrameUrl && (
+            <div className="debug-frame-container">
+              <h4>🖼️ Frame Used for Detection</h4>
+              <p className="frame-info">{frameInfo}</p>
+              <img 
+                src={debugFrameUrl} 
+                alt="Debug frame" 
+                className="debug-frame"
+                onError={() => setDebugFrameUrl(null)}
+              />
+            </div>
+          )}
         </div>
       </div>
     </motion.div>

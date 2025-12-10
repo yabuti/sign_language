@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiUsers, FiActivity, FiTrash2, FiShield, FiShieldOff, FiLogOut } from "react-icons/fi";
+import { FiUsers, FiActivity, FiTrash2, FiShield, FiShieldOff, FiLogOut, FiVideo, FiImage, FiMic } from "react-icons/fi";
 import axios from "axios";
 import "./AdminDashboard.css";
 
@@ -265,10 +265,11 @@ function AdminDashboard() {
             <div className="activity-list">
               {userActivity.map((activity, index) => (
                 <div key={index} className="activity-item">
-                  <span className={`feature-badge ${activity.feature_used}`}>
-                    {activity.feature_used === "webcam" && "🎥 Webcam"}
-                    {activity.feature_used === "image" && "📷 Image"}
-                    {activity.feature_used === "voice" && "🎤 Voice"}
+                  <span className={`feature-badge feature-${activity.feature_used}`}>
+                    {activity.feature_used === "webcam" && <><FiVideo size={14} /> Webcam</>}
+                    {activity.feature_used === "image" && <><FiImage size={14} /> Image</>}
+                    {activity.feature_used === "voice" && <><FiMic size={14} /> Voice</>}
+                    {!["webcam", "image", "voice"].includes(activity.feature_used) && activity.feature_used}
                   </span>
                   <span className="activity-time">
                     {new Date(activity.used_at).toLocaleString()}

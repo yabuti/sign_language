@@ -1,0 +1,139 @@
+.word-learning {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.word-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.word-subtitle {
+  text-align: center;
+  color: #aaa;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.word-box {
+  background: linear-gradient(145deg, #ffffff, #f5f5f5);
+  border-radius: 15px;
+  padding: 20px 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.word-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(74, 144, 217, 0.3);
+  border-color: #4a90d9;
+}
+
+.word-char {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.word-name {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.word-icons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.media-icon {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+/* Modal Styles */
+.word-modal {
+  max-width: 900px;
+  width: 95vw;
+}
+
+.modal-word-display {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.modal-word {
+  font-size: 72px;
+  color: #4a90d9;
+  margin: 0;
+  text-shadow: 0 0 30px rgba(74, 144, 217, 0.4);
+}
+
+.modal-word-latin {
+  font-size: 24px;
+  color: #10b981;
+  margin: 10px 0 0;
+}
+
+/* Media Display */
+.modal-media {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.modal-video-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-video {
+  width: 100%;
+  max-height: 70vh;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .word-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+  }
+
+  .word-char {
+    font-size: 22px;
+  }
+
+  .modal-word {
+    font-size: 48px;
+  }
+
+  .modal-word-name {
+    font-size: 20px;
+  }
+
+  .media-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}

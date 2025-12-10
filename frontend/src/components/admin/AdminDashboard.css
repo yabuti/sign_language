@@ -309,21 +309,23 @@
   border-radius: 20px;
   font-weight: 600;
   font-size: 0.9rem;
+  color: white;
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.feature-badge.webcam {
+.feature-badge.feature-webcam {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
 }
 
-.feature-badge.image {
+.feature-badge.feature-image {
   background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-  color: white;
 }
 
-.feature-badge.voice {
+.feature-badge.feature-voice {
   background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-  color: white;
 }
 
 .activity-time {

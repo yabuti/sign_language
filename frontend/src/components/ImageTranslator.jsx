@@ -10,6 +10,7 @@ function ImageTranslator() {
     "Your translated text will appear here"
   );
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedModel, setSelectedModel] = useState("asl_alphabet");
 
   // Track activity when component mounts
   useEffect(() => {
@@ -24,10 +25,10 @@ function ImageTranslator() {
       setIsProcessing(true);
       setTranslatedText("Processing image...");
       
-      // Here you can send image to backend for processing
       try {
         const formData = new FormData();
         formData.append("image", file);
+        formData.append("model", selectedModel);
 
         const response = await fetch("http://localhost:5000/predict", {
           method: "POST",
@@ -35,7 +36,21 @@ function ImageTranslator() {
         });
 
         const data = await response.json();
-        setTranslatedText(data.text || "Translation complete!");
+        
+        if (data.success) {
+          let resultText = `✅ ${data.text} (${data.confidence}% confidence)\n`;
+          resultText += `📊 Model: ${data.model_used}\n\n`;
+          
+          if (data.top_3 && data.top_3.length > 0) {
+            resultText += "Top 3 Predictions:\n";
+            data.top_3.forEach((pred, idx) => {
+              resultText += `${idx + 1}. ${pred.label} - ${pred.confidence}%\n`;
+            });
+          }
+          setTranslatedText(resultText);
+        } else {
+          setTranslatedText(data.text || "Error processing image");
+        }
       } catch (error) {
         console.error("Error processing image:", error);
         setTranslatedText("Error processing image. Please try again.");
@@ -54,6 +69,22 @@ function ImageTranslator() {
       transition={{ duration: 0.5 }}
     >
       <h2>📷 Image → Text</h2>
+
+      {/* Language Selection */}
+      <div className="language-selector">
+        <button
+          className={`lang-btn ${selectedModel === "asl_alphabet" ? "active" : ""}`}
+          onClick={() => setSelectedModel("asl_alphabet")}
+        >
+          🇺🇸 ASL Alphabet (A-Z)
+        </button>
+        <button
+          className={`lang-btn ${selectedModel === "ethiopian" ? "active" : ""}`}
+          onClick={() => setSelectedModel("ethiopian")}
+        >
+          🇪🇹 Ethiopian Signs
+        </button>
+      </div>
 
       <div className="upload-area">
         <label htmlFor="file-upload" className="upload-label">
@@ -85,7 +116,7 @@ function ImageTranslator() {
       <div className="text-output">
         <h3>📝 Translated Text</h3>
         <div className="text-display">
-          <p>{translatedText}</p>
+          <p style={{ whiteSpace: 'pre-line' }}>{translatedText}</p>
         </div>
       </div>
     </motion.div>

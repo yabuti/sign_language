@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import WebcamTranslator from "./WebcamTranslator";
 import ImageTranslator from "./ImageTranslator";
 import VoiceTranslator from "./VoiceTranslator";
+import AlphabetLearning from "./AlphabetLearning";
 import "../index.css";
 
 function Dashboard() {
@@ -44,6 +45,17 @@ function Dashboard() {
             transition={{ duration: 0.5 }}
           >
             <VoiceTranslator />
+          </motion.div>
+        )}
+        {section === "learn" && (
+          <motion.div
+            key="learn"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <AlphabetLearning />
           </motion.div>
         )}
       </AnimatePresence>

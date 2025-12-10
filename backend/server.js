@@ -226,18 +226,20 @@ const upload = multer({ dest: "uploads/" });
 const { spawn } = require("child_process");
 const path = require("path");
 
-// Image to Text Prediction
+// Image to Text Prediction (Multi-Model)
 app.post("/predict", upload.single("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No image uploaded" });
   }
 
   const imagePath = path.resolve(req.file.path);
-  // Try Keras model first (better for letters), fallback to PyTorch
-  const scriptPath = path.join(__dirname, "predict_keras.py");
+  const modelName = req.body.model || "asl_alphabet"; // Default to ASL alphabet
+  const scriptPath = path.join(__dirname, "predict_image_multi.py");
 
-  // Call Python prediction script
-  const python = spawn("python", [scriptPath, imagePath]);
+  console.log(`📷 Image prediction with model: ${modelName}`);
+
+  // Call Python prediction script with model selection
+  const python = spawn("python", [scriptPath, imagePath, modelName]);
 
   let result = "";
   let error = "";
@@ -333,8 +335,15 @@ app.post("/predict-webcam", upload.single("video"), (req, res) => {
   }
 
   const videoPath = path.resolve(req.file.path);
-  const modelName = req.body.model || "asl_cnn_lstm"; // Default to ASL model
-  const scriptPath = path.join(__dirname, "predict_webcam_multi_model.py");
+  const modelName = req.body.model || "eth_landmark"; // Default to landmark model
+  
+  // Choose script based on model
+  let scriptPath;
+  if (modelName === "eth_landmark") {
+    scriptPath = path.join(__dirname, "predict_landmark.py");
+  } else {
+    scriptPath = path.join(__dirname, "predict_webcam_multi_model.py");
+  }
 
   console.log(`📁 Video saved at: ${videoPath}`);
   console.log(`🤖 Using model: ${modelName}`);
@@ -388,6 +397,20 @@ app.post("/predict-webcam", upload.single("video"), (req, res) => {
       });
     }
   });
+});
+
+// ====== Serve Debug Frame ======
+app.get("/debug-frame", (req, res) => {
+  const debugPath = path.join(__dirname, "debug_frame.jpg");
+  if (fs.existsSync(debugPath)) {
+    // Add timestamp to prevent caching
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.sendFile(debugPath);
+  } else {
+    res.status(404).json({ error: "Debug frame not found" });
+  }
 });
 
 // ====== Get Available Models ======
